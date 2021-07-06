@@ -4,7 +4,7 @@ let cities = {
 };
 
 const state = {};
-state.displayedCities = cities;
+state.displayedCities = { ...cities };
 state.chosenCities = {};
 
 const selectCountry = document.querySelector("#select-country");
@@ -25,6 +25,8 @@ const renderSelectOptions = (options, parent) => {
 };
 
 const getCountryByCity = (cityName, citiesObj) => {
+  console.log(cityName);
+  console.log(citiesObj);
   const countryName = Object.entries(citiesObj).reduce(
     (acc, [country, cities]) => {
       if (cities.includes(cityName)) acc = country;
@@ -35,8 +37,11 @@ const getCountryByCity = (cityName, citiesObj) => {
   return countryName;
 };
 
+console.log(getCountryByCity("Odessa", cities));
+
 const deleteCityHandler = (city) => {
   const countryName = getCountryByCity(city, cities);
+  console.log(`delete ${city} ${countryName}`);
   state.chosenCities[countryName] = state.chosenCities[countryName].filter(
     (cityName) => cityName !== city
   );
@@ -91,12 +96,18 @@ const selectCountryHandler = (e) => {
 
 const selectCityHandler = (e) => {
   const chosenCityName = e.target.value;
-  console.log(chosenCityName);
   const countryName = getCountryByCity(chosenCityName, cities);
+  console.log(chosenCityName);
+
   state.chosenCities[countryName] = state.chosenCities[countryName] || [];
   state.chosenCities[countryName].push(chosenCityName);
-  console.log(state.chosenCities);
   renderChosenItems(state.chosenCities, citiesListHTMLElement);
+  state.displayedCities[countryName] = state.displayedCities[
+    countryName
+  ].filter((cityName) => cityName !== chosenCityName);
+  console.log(state.displayedCities);
+  renderSelectOptions(Object.keys(state.displayedCities), selectCountry);
+  renderSelectOptions(state.displayedCities[countryName], selectCity);
   // const selectedCities = state.displayedCities.find(
   //   (el) => el.name === chosenCountryName
   // ).cities;
