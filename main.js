@@ -1,6 +1,6 @@
 let cities = {
-  US: ["NY", "Chicago"],
-  Ukraine: ["Kyiv", "Odessa"],
+  US: ["NY", "Chicago", "LA"],
+  Ukraine: ["Kyiv", "Odessa", "ZP"],
 };
 
 const state = {};
@@ -45,12 +45,18 @@ const deleteCityHandler = (city) => {
   state.chosenCities[countryName] = state.chosenCities[countryName].filter(
     (cityName) => cityName !== city
   );
+  state.displayedCities[countryName].push(city);
+  renderSelectOptions(Object.keys(state.displayedCities), selectCountry);
+  renderSelectOptions(state.displayedCities[countryName], selectCity);
   renderChosenItems(state.chosenCities, citiesListHTMLElement);
 };
 
 const deleteCountryHandler = (country) => {
   state.chosenCities[country] = [];
   renderChosenItems(state.chosenCities, citiesListHTMLElement);
+  state.displayedCities[country] = [...cities[country]];
+  renderSelectOptions(Object.keys(state.displayedCities), selectCountry);
+  renderSelectOptions(state.displayedCities[country], selectCity);
   console.log(`Deleted ${country}`);
 };
 
@@ -108,12 +114,6 @@ const selectCityHandler = (e) => {
   console.log(state.displayedCities);
   renderSelectOptions(Object.keys(state.displayedCities), selectCountry);
   renderSelectOptions(state.displayedCities[countryName], selectCity);
-  // const selectedCities = state.displayedCities.find(
-  //   (el) => el.name === chosenCountryName
-  // ).cities;
-
-  // console.log(selectedCities);
-  // renderSelectOptions(selectedCities, selectCity);
 };
 
 selectCountry.addEventListener("change", selectCountryHandler);
