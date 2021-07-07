@@ -22,3 +22,9 @@ body {
     text-align: center;
     background-color: #fff;
 }
+
+.btn {
+    padding:0 10px;
+    border-radius: 10%;
+    cursor: pointer;
+}
